@@ -41,27 +41,31 @@ const Signup = () => {
     setName(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    fetch('/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, username, password }),
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        navigate('/login');
+  
+    try {
+      const response = await fetch('http://localhost:5000/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, username, password }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        setError('User created successfully');
+        navigate('/login'); // Redirect to login page after successful signup
       } else {
         setError(data.msg);
       }
-    })
-    .catch(() => {
+    } catch (error) {
       setError('Something went wrong');
-    });
+    }
   };
+  
 
   return (
     <RootContainer>

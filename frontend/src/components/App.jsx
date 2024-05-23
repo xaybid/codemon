@@ -10,10 +10,8 @@ import Login from "./login";
 import Signup from "./signup";
 
 function App() {
-    // State to track authentication status
     const [authenticated, setAuthenticated] = useState(false);
 
-    // State for editor content
     const [html, setHtml] = useLocalStorage("html", initialHtmlContent);
     const [css, setCss] = useLocalStorage("css", initialCssContent);
     const [js, setJs] = useLocalStorage("js", initialJsContent);
@@ -22,7 +20,6 @@ function App() {
     const timerRef = useRef(null);
     const iframeRef = useRef(null);
 
-    // Handle iframe load
     const handleIframeLoad = () => {
         const iframe = iframeRef.current;
         if (iframe) {
@@ -31,7 +28,6 @@ function App() {
         }
     };
 
-    // Refresh iframe content
     useEffect(() => {
         timerRef.current = setTimeout(() => {
             setSrcDoc(`
@@ -46,10 +42,8 @@ function App() {
         return () => clearTimeout(timerRef.current);
     }, [html, css, js]);
 
-    // Handle top pane animation end
     const handleTopPaneAnimationEnd = () => setShowIframe(true);
 
-    // Function to dynamically add the chatbot script
     const addChatbotScript = () => {
         const script1 = document.createElement("script");
         script1.innerHTML = `
@@ -82,7 +76,6 @@ function App() {
         };
     };
 
-    // Effect to add the chatbot script after authentication
     useEffect(() => {
         if (authenticated) {
             addChatbotScript();

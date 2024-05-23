@@ -36,31 +36,29 @@ const Login = ({ setIsAuthenticated }) => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (username === 'admin' && password === 'password') {
-      setIsAuthenticated(true);
-      navigate('/');
-    } else {
-      fetch('/login', {
+
+    try {
+      const response = await fetch('http://localhost:5000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, password }),
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          setIsAuthenticated(true);
-          navigate('/');
-        } else {
-          setError(data.msg);
-        }
-      })
-      .catch(() => {
-        setError('Something went wrong');
       });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        setIsAuthenticated(true); // Corrected here
+        navigate('/');
+      } else {
+        setError(data.msg);
+      }
+    } catch (error) {
+      setError('Something went wrong');
     }
   };
 
