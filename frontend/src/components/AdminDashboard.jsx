@@ -1,80 +1,102 @@
+// import React, { useState, useEffect } from 'react';
+// import Typography from '@mui/material/Typography';
+// import Container from '@mui/material/Container';
+// import Box from '@mui/material/Box';
+
+// const AdminDashboard = () => {
+//   const [users, setUsers] = useState([]);
+
+//   useEffect(() => {
+//     // Simulated user data for demonstration
+//     const userData = [
+//       { id: 1, name: 'John Doe', email: 'john@example.com' },
+//       { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
+//       { id: 3, name: 'Alice Johnson', email: 'alice@example.com' },
+//     ];
+
+//     setUsers(userData);
+//   }, []);
+
+//   return (
+//     <Container>
+//       <Box my={4}>
+//         <Typography variant="h4" component="h1" gutterBottom>
+//           Admin Dashboard
+//         </Typography>
+//         <Typography variant="h6" gutterBottom>
+//           Total Users: {users.length}
+//         </Typography>
+//         <Typography variant="h6" gutterBottom>
+//           User Details:
+//         </Typography>
+//         <ul>
+//           {users.map(user => (
+//             <li key={user.id}>
+//               Name: {user.name}, Email: {user.email}
+//             </li>
+//           ))}
+//         </ul>
+//       </Box>
+//     </Container>
+//   );
+// };
+
+// export default AdminDashboard;
+
 import React, { useState, useEffect } from 'react';
-import { Typography, Paper, Grid } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
 
 const AdminDashboard = () => {
-  // Mock data for active users, codes run, and languages used
-  const [activeUsers, setActiveUsers] = useState(0);
-  const [codesRunByUser, setCodesRunByUser] = useState({});
-  const [languagesUsedByUser, setLanguagesUsedByUser] = useState({});
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock API call to fetch data
   useEffect(() => {
-    // Simulating API call to fetch data
-    // Replace with actual API call in your application
-    const fetchData = async () => {
-      // Mock data for active users count
-      setActiveUsers(10);
-
-      // Mock data for codes run by user
-      const mockCodesRunByUser = {
-        user1: 20,
-        user2: 15,
-        user3: 25,
-      };
-      setCodesRunByUser(mockCodesRunByUser);
-
-      // Mock data for languages used by user
-      const mockLanguagesUsedByUser = {
-        user1: ['JavaScript', 'Python'],
-        user2: ['JavaScript', 'Java'],
-        user3: ['JavaScript', 'HTML/CSS'],
-      };
-      setLanguagesUsedByUser(mockLanguagesUsedByUser);
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('/api/users'); // Assuming the API endpoint is '/api/users'
+        if (!response.ok) {
+          throw new Error('Failed to fetch users');
+        }
+        const data = await response.json();
+        setUsers(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
     };
 
-    fetchData();
+    fetchUsers();
   }, []);
 
   return (
-    <div>
-      <Typography variant="h4" gutterBottom>
-        Admin Dashboard
-      </Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6} md={4}>
-          <Paper elevation={3} style={{ padding: '1rem', textAlign: 'center' }}>
-            <Typography variant="h6">Active Users</Typography>
-            <Typography variant="h4" style={{ marginTop: '1rem' }}>
-              {activeUsers}
+    <Container>
+      <Box my={4}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Admin Dashboard
+        </Typography>
+        {loading ? (
+          <Typography variant="body1">Loading...</Typography>
+        ) : (
+          <div>
+            <Typography variant="h6" gutterBottom>
+              Total Users: {users.length}
             </Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <Paper elevation={3} style={{ padding: '1rem', textAlign: 'center' }}>
-            <Typography variant="h6">Codes Run by User</Typography>
-            <div>
-              {Object.entries(codesRunByUser).map(([user, codes]) => (
-                <div key={user}>
-                  <Typography variant="body1">{`${user}: ${codes}`}</Typography>
-                </div>
+            <Typography variant="h6" gutterBottom>
+              User Details:
+            </Typography>
+            <ul>
+              {users.map(user => (
+                <li key={user._id}>
+                  Name: {user.name}, Email: {user.email}
+                </li>
               ))}
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={12} md={4}>
-          <Paper elevation={3} style={{ padding: '1rem', textAlign: 'center' }}>
-            <Typography variant="h6">Languages Used by User</Typography>
-            <div>
-              {Object.entries(languagesUsedByUser).map(([user, languages]) => (
-                <div key={user}>
-                  <Typography variant="body1">{`${user}: ${languages.join(', ')}`}</Typography>
-                </div>
-              ))}
-            </div>
-          </Paper>
-        </Grid>
-      </Grid>
-    </div>
+            </ul>
+          </div>
+        )}
+      </Box>
+    </Container>
   );
 };
 
