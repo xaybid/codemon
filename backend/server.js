@@ -77,4 +77,27 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// Admin route to fetch all users
+app.get('/admin', async (_, res) => {
+  try {
+    const users = await User.find({}, 'name username'); // Fetch name and username fields for all users
+    res.json(users);
+  } catch (err) {
+    console.error('Error fetching users:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+app.delete('/admin/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    await User.findByIdAndDelete(userId);
+    res.status(200).json({ msg: 'User deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting user:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

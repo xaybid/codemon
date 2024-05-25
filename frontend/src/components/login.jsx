@@ -53,7 +53,8 @@ const Login = ({ setIsAuthenticated }) => {
       if (response.ok) {
         localStorage.setItem('token', data.token);
         setIsAuthenticated(true); // Corrected here
-        navigate('/');
+        alert('Login Successful')
+        navigate('/editor');
       } else {
         setError(data.msg);
       }

@@ -36,4 +36,6 @@ const HomePage = () => {
         </Box>
       </Container>
     </>
-  )};export default HomePage;
+  )};
+  
+  export default HomePage;

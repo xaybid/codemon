@@ -56,7 +56,7 @@ const Signup = () => {
       const data = await response.json();
   
       if (response.ok) {
-        setError('User created successfully');
+        alert('User created successfully');
         navigate('/login'); // Redirect to login page after successful signup
       } else {
         setError(data.msg);
