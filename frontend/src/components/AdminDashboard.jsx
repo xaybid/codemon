@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Container, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
+import Header from './Header';
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
@@ -39,6 +40,9 @@ const AdminDashboard = () => {
   };
 
   return (
+    <>
+    <Header />
+    
     <Container>
       <Box my={4}>
         <Typography variant="h4" component="h1" gutterBottom>
@@ -51,18 +55,26 @@ const AdminDashboard = () => {
             <Table>
               <TableHead>
                 <TableRow>
+                  <TableCell>Serial No.</TableCell> {/* Add Serial No. column */}
                   <TableCell>ID</TableCell>
                   <TableCell>Name</TableCell>
                   <TableCell>Username</TableCell>
+                  <TableCell>Email</TableCell> {/* Add Email column */}
+                  <TableCell>Occupation</TableCell> {/* Add Occupation column */}
+                  <TableCell>Age</TableCell> {/* Add Age column */}
                   <TableCell>Action</TableCell> {/* Add a new table cell for the action */}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {users.map((user) => (
+                {users.map((user, index) => (
                   <TableRow key={user._id}>
+                    <TableCell>{index + 1}</TableCell> {/* Display Serial No. */}
                     <TableCell>{user._id}</TableCell>
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.username}</TableCell>
+                    <TableCell>{user.email}</TableCell> {/* Display Email */}
+                    <TableCell>{user.occupation}</TableCell> {/* Display Occupation */}
+                    <TableCell>{user.age}</TableCell> {/* Display Age */}
                     <TableCell>
                       <Button variant="contained" color="error" onClick={() => handleDeleteUser(user._id)}>
                         Delete
@@ -76,6 +88,7 @@ const AdminDashboard = () => {
         )}
       </Box>
     </Container>
+    </>
   );
 };
 

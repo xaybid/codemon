@@ -10,11 +10,11 @@ import Login from "./login";
 import Signup from "./signup";
 import HomePage from "./Homepage";
 import AdminDashboard from './AdminDashboard';
-import AdminLoginPage from './AdminLoginPage'; // Import AdminLoginPage component
+import AdminLoginPage from './AdminLoginPage';
+import Header from './Header'; // Import Header component
 
 function App() {
     const [authenticated, setAuthenticated] = useState(false);
-
     const [html, setHtml] = useLocalStorage("html", initialHtmlContent);
     const [css, setCss] = useLocalStorage("css", initialCssContent);
     const [js, setJs] = useLocalStorage("js", initialJsContent);
@@ -47,75 +47,99 @@ function App() {
 
     const handleTopPaneAnimationEnd = () => setShowIframe(true);
 
-    const addChatbotScript = () => {
-        const script1 = document.createElement("script");
-        script1.innerHTML = `
-            window.embeddedChatbotConfig = {
-                chatbotId: "RRyso6AYQSTTe2EBMuIac",
-                domain: "www.chatbase.co"
-            };
-        `;
-        document.head.appendChild(script1);
+    const addChatbotScript = (addScript) => {
+        const existingScript1 = document.querySelector('script[chatbotId="RRyso6AYQSTTe2EBMuIac"]');
+        const existingScript2 = document.querySelector('script[src="https://www.chatbase.co/embed.min.js"]');
 
-        const script2 = document.createElement("script");
-        script2.src = "https://www.chatbase.co/embed.min.js";
-        script2.setAttribute("chatbotId", "RRyso6AYQSTTe2EBMuIac");
-        script2.setAttribute("domain", "www.chatbase.co");
-        script2.defer = true;
+        if (addScript) {
+            if (!existingScript1 || !existingScript2) {
+                const script1 = document.createElement("script");
+                script1.innerHTML = `
+                    window.embeddedChatbotConfig = {
+                        chatbotId: "RRyso6AYQSTTe2EBMuIac",
+                        domain: "www.chatbase.co"
+                    };
+                `;
+                document.head.appendChild(script1);
 
-        script2.onload = () => {
-            console.log('Chatbot script loaded successfully');
-        };
+                const script2 = document.createElement("script");
+                script2.src = "https://www.chatbase.co/embed.min.js";
+                script2.setAttribute("chatbotId", "RRyso6AYQSTTe2EBMuIac");
+                script2.setAttribute("domain", "www.chatbase.co");
+                script2.defer = true;
 
-        script2.onerror = () => {
-            console.error('Error loading chatbot script');
-        };
+                script2.onload = () => {
+                    console.log('Chatbot script loaded successfully');
+                };
 
-        document.head.appendChild(script2);
+                script2.onerror = () => {
+                    console.error('Error loading chatbot script');
+                };
 
-        return () => {
-            document.head.removeChild(script1);
-            document.head.removeChild(script2);
-        };
+                document.head.appendChild(script2);
+
+                return () => {
+                    if (script1.parentNode) {
+                        script1.parentNode.removeChild(script1);
+                    }
+                    if (script2.parentNode) {
+                        script2.parentNode.removeChild(script2);
+                    }
+                };
+            }
+        } else {
+            if (existingScript1 && existingScript1.parentNode) {
+                existingScript1.parentNode.removeChild(existingScript1);
+            }
+            if (existingScript2 && existingScript2.parentNode) {
+                existingScript2.parentNode.removeChild(existingScript2);
+            }
+        }
     };
 
     useEffect(() => {
-        if (authenticated) {
-            addChatbotScript();
+        if (authenticated && window.location.pathname === '/editor') {
+            addChatbotScript(true);
+        } else {
+            addChatbotScript(false);
         }
     }, [authenticated]);
 
     return (
         <Router>
             <CssBaseline />
+            
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<Login setIsAuthenticated={setAuthenticated} />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/adminlogin" element={<AdminLoginPage onAdminLogin={() => setAuthenticated(true)} />} /> {/* Route for AdminLoginPage */}
+                <Route path="/adminlogin" element={<AdminLoginPage onAdminLogin={() => setAuthenticated(true)} />} />
                 <Route path="/editor" element={
                     authenticated ? (
-                        <ImagePreloader images={imageSources}>
-                            <div className="container primary-container" onAnimationEnd={handleTopPaneAnimationEnd}>
-                                <Editor language="html" displayName="HTML" value={html} onChange={setHtml} animationQueue={0.6} />
-                                <Editor language="css" displayName="CSS" value={css} onChange={setCss} animationQueue={0.55} />
-                                <Editor language="javascript" displayName="JS" value={js} onChange={setJs} animationQueue={0.5} />
-                            </div>
-                            {showIframe && (
-                                <div className="container iframe-container">
-                                    <iframe
-                                        width="100%"
-                                        height="100%"
-                                        srcDoc={srcDoc}
-                                        title="sandbox output"
-                                        sandbox="allow-same-origin allow-scripts"
-                                        ref={iframeRef}
-                                        onLoad={handleIframeLoad}
-                                    />
+                        <>
+                        <Header authenticated={authenticated} setAuthenticated={setAuthenticated} />
+                            <ImagePreloader images={imageSources}>
+                                <div className="container primary-container" onAnimationEnd={handleTopPaneAnimationEnd}>
+                                    <Editor language="html" displayName="HTML" value={html} onChange={setHtml} animationQueue={0.6} />
+                                    <Editor language="css" displayName="CSS" value={css} onChange={setCss} animationQueue={0.55} />
+                                    <Editor language="javascript" displayName="JS" value={js} onChange={setJs} animationQueue={0.5} />
                                 </div>
-                            )}
-                        </ImagePreloader>
+                                {showIframe && (
+                                    <div className="container iframe-container">
+                                        <iframe
+                                            width="100%"
+                                            height="100%"
+                                            srcDoc={srcDoc}
+                                            title="sandbox output"
+                                            sandbox="allow-same-origin allow-scripts"
+                                            ref={iframeRef}
+                                            onLoad={handleIframeLoad}
+                                        />
+                                    </div>
+                                )}
+                            </ImagePreloader>
+                        </>
                     ) : (
                         <Navigate to="/login" />
                     )

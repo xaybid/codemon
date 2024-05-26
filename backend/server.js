@@ -26,13 +26,16 @@ const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  email: { type: String, required: true },
+  occupation: { type: String, enum: ['student', 'employee'], required: true },
+  age: { type: Number, required: true },
 });
 
 const User = mongoose.model('User', UserSchema);
 
 // Routes
 app.post('/signup', async (req, res) => {
-  const { name, username, password } = req.body;
+  const { name, username, password, email, occupation, age } = req.body;
 
   try {
     let user = await User.findOne({ username });
@@ -40,7 +43,7 @@ app.post('/signup', async (req, res) => {
       return res.status(400).json({ msg: 'User already exists' });
     }
 
-    user = new User({ name, username, password });
+    user = new User({ name, username, password, email, occupation, age });
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
@@ -80,7 +83,7 @@ app.post('/login', async (req, res) => {
 // Admin route to fetch all users
 app.get('/admin', async (_, res) => {
   try {
-    const users = await User.find({}, 'name username'); // Fetch name and username fields for all users
+    const users = await User.find({}, 'name username email occupation age'); // Include additional fields
     res.json(users);
   } catch (err) {
     console.error('Error fetching users:', err.message);

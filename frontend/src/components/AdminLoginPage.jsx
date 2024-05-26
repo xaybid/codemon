@@ -107,6 +107,7 @@ import { Container, Typography, TextField, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Wallpaper from '../assets/images/Wallpaper.jpg'; // Adjust the import according to your file structure
 import { Navigate } from 'react-router-dom'; // Import Navigate component
+import Header from './Header';
 
 const RootContainer = styled('div')({
   backgroundImage: `url(${Wallpaper})`,
@@ -161,7 +162,10 @@ const AdminLoginPage = () => {
   }
 
   return (
+    <>
+    <Header />
     <RootContainer>
+      
       <Container maxWidth="xs">
         <FormContainer>
           <Typography variant="h5" component="h1" gutterBottom>
@@ -208,6 +212,7 @@ const AdminLoginPage = () => {
         </FormContainer>
       </Container>
     </RootContainer>
+    </>
   );
 };
 

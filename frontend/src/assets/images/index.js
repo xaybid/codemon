@@ -5,6 +5,7 @@ import FallbackResetIcon from "./FallbackResetIcon.png";
 import FallbackExpandIcon from "./FallbackExpandIcon.png";
 import FallbackDownloadIcon from "./FallbackDownloadIcon.png";
 import Wallpaper from "./Wallpaper.jpg";
+import Hero from "./hero.jpg";
 
 export {
 	ResetIcon,
@@ -14,6 +15,7 @@ export {
 	FallbackExpandIcon,
 	FallbackDownloadIcon,
 	Wallpaper,
+	Hero,
 };
 
 export const imageSources = [
@@ -24,4 +26,5 @@ export const imageSources = [
 	FallbackExpandIcon,
 	FallbackDownloadIcon,
 	Wallpaper,
+	Hero,
 ];

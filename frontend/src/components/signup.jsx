@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Container, Typography, TextField, Button } from '@mui/material';
+import { Container, Typography, TextField, Button, MenuItem } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Wallpaper } from '../assets/images';
 import { useNavigate } from 'react-router-dom';
+import Header from './Header';
 
 const RootContainer = styled('div')({
   backgroundImage: `url(${Wallpaper})`,
@@ -23,11 +24,18 @@ const FormContainer = styled('div')({
 });
 
 const Signup = () => {
+  const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [occupation, setOccupation] = useState('');
+  const [age, setAge] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -37,24 +45,32 @@ const Signup = () => {
     setPassword(e.target.value);
   };
 
-  const handleNameChange = (e) => {
-    setName(e.target.value);
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleOccupationChange = (e) => {
+    setOccupation(e.target.value);
+  };
+
+  const handleAgeChange = (e) => {
+    setAge(e.target.value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch('http://localhost:5000/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, username, password }),
+        body: JSON.stringify({ name, username, password, email, occupation, age }),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
         alert('User created successfully');
         navigate('/login'); // Redirect to login page after successful signup
@@ -65,9 +81,10 @@ const Signup = () => {
       setError('Something went wrong');
     }
   };
-  
 
   return (
+    <>
+    <Header />
     <RootContainer>
       <Container maxWidth="xs">
         <FormContainer>
@@ -114,6 +131,45 @@ const Signup = () => {
               value={password}
               onChange={handlePasswordChange}
             />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email"
+              name="email"
+              autoComplete="email"
+              value={email}
+              onChange={handleEmailChange}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="occupation"
+              select
+              label="Occupation"
+              value={occupation}
+              onChange={handleOccupationChange}
+            >
+              <MenuItem value="student">Student</MenuItem>
+              <MenuItem value="employee">Employee</MenuItem>
+            </TextField>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="age"
+              label="Age"
+              name="age"
+              autoComplete="age"
+              type="number"
+              value={age}
+              onChange={handleAgeChange}
+            />
             <Button
               type="submit"
               fullWidth
@@ -135,6 +191,7 @@ const Signup = () => {
         </FormContainer>
       </Container>
     </RootContainer>
+    </>
   );
 };
 

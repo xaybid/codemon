@@ -3,6 +3,7 @@ import { Container, Typography, TextField, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Wallpaper } from '../assets/images';
 import { useNavigate } from 'react-router-dom';
+import Header from './Header';
 
 const RootContainer = styled('div')({
   backgroundImage: `url(${Wallpaper})`,
@@ -64,7 +65,10 @@ const Login = ({ setIsAuthenticated }) => {
   };
 
   return (
-    <RootContainer>
+  <>
+  <Header/>
+  
+   <RootContainer>
       <Container maxWidth="xs">
         <FormContainer>
           <Typography variant="h5" component="h1" gutterBottom>
@@ -119,6 +123,7 @@ const Login = ({ setIsAuthenticated }) => {
         </FormContainer>
       </Container>
     </RootContainer>
+    </> 
   );
 };
 
