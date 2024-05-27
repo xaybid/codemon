@@ -19,7 +19,7 @@ import {
 import { EXTENSION_MAP, INITIAL_CONTENT_MAP } from "../constants";
 import { testUserAgentForMobileDevice } from "../utilities/utilFunctions";
 
-// Language configuration for CodeMirror component based on langauage
+// Language configuration for CodeMirror component based on language
 const LANG_CONFIG_MAP = {
 	javascript: [javascript({ jsx: true })],
 	html: [html({})],

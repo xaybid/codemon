@@ -11,7 +11,8 @@ import Signup from "./signup";
 import HomePage from "./Homepage";
 import AdminDashboard from './AdminDashboard';
 import AdminLoginPage from './AdminLoginPage';
-import Header from './Header'; // Import Header component
+import Header from './Header';
+import CircularLoader from "./CircularLoader";
 
 function App() {
     const [authenticated, setAuthenticated] = useState(false);
@@ -20,6 +21,7 @@ function App() {
     const [js, setJs] = useLocalStorage("js", initialJsContent);
     const [srcDoc, setSrcDoc] = useState("");
     const [showIframe, setShowIframe] = useState(false);
+    const [isLoading, setIsLoading] = useState(true); // State to manage loading status
     const timerRef = useRef(null);
     const iframeRef = useRef(null);
 
@@ -104,6 +106,20 @@ function App() {
             addChatbotScript(false);
         }
     }, [authenticated]);
+
+    // Simulate initial setup/loading process
+    useEffect(() => {
+        const simulateLoading = async () => {
+            // Simulate a network request or other async operation
+            await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 seconds delay
+            setIsLoading(false);
+        };
+        simulateLoading();
+    }, []);
+
+    if (isLoading) {
+        return <CircularLoader />;
+    }
 
     return (
         <Router>

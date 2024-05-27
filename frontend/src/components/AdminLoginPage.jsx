@@ -127,6 +127,20 @@ const FormContainer = styled('div')({
   textAlign: 'center',
 });
 
+const buttonStyles = {
+  margin: 'auto',
+  background: 'linear-gradient(45deg, #000000 30%, #000000 90%)',
+  color: 'white',
+  borderRadius: '15px',
+  boxShadow: '0 3px 5px 2px rgba(105, 105, 255, .3)',
+  transition: 'transform 0.3s, box-shadow 0.3s',
+  '&:hover': {
+    background: 'linear-gradient(45deg, #000000 30%, #000000 90%)',
+    boxShadow: '0 6px 10px 4px rgba(105, 105, 255, .3)',
+    transform: 'scale(1.05)',
+  },
+};
+
 const AdminLoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -203,7 +217,7 @@ const AdminLoginPage = () => {
               type="submit"
               fullWidth
               variant="contained"
-              color="primary"
+              sx={buttonStyles} // Apply button styles here
               style={{ marginTop: '16px' }}
             >
               Sign In

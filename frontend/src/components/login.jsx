@@ -23,6 +23,20 @@ const FormContainer = styled('div')({
   textAlign: 'center',
 });
 
+const buttonStyles = {
+  margin: 'auto',
+  background: 'linear-gradient(45deg, #000000 30%, #000000 90%)',
+  color: 'white',
+  borderRadius: '15px',
+  boxShadow: '0 3px 5px 2px rgba(105, 105, 255, .3)',
+  transition: 'transform 0.3s, box-shadow 0.3s',
+  '&:hover': {
+    background: 'linear-gradient(45deg, #000000 30%, #000000 90%)',
+    boxShadow: '0 6px 10px 4px rgba(105, 105, 255, .3)',
+    transform: 'scale(1.05)',
+  },
+};
+
 const Login = ({ setIsAuthenticated }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -53,8 +67,8 @@ const Login = ({ setIsAuthenticated }) => {
 
       if (response.ok) {
         localStorage.setItem('token', data.token);
-        setIsAuthenticated(true); // Corrected here
-        alert('Login Successful')
+        setIsAuthenticated(true);
+        alert('Login Successful');
         navigate('/editor');
       } else {
         setError(data.msg);
@@ -65,64 +79,63 @@ const Login = ({ setIsAuthenticated }) => {
   };
 
   return (
-  <>
-  <Header/>
-  
-   <RootContainer>
-      <Container maxWidth="xs">
-        <FormContainer>
-          <Typography variant="h5" component="h1" gutterBottom>
-            Sign in
-          </Typography>
-          {error && <Typography color="error">{error}</Typography>}
-          <form onSubmit={handleSubmit}>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label="Username"
-              name="username"
-              autoComplete="username"
-              autoFocus
-              value={username}
-              onChange={handleUsernameChange}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={handlePasswordChange}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              style={{ marginTop: '16px' }}
-            >
-              Sign In
-            </Button>
-            <Button
-              fullWidth
-              color="primary"
-              onClick={() => navigate('/signup')}
-              style={{ marginTop: '8px' }}
-            >
-              Create An Account! Sign up now
-            </Button>
-          </form>
-        </FormContainer>
-      </Container>
-    </RootContainer>
+    <>
+      <Header/>
+      <RootContainer>
+        <Container maxWidth="xs">
+          <FormContainer>
+            <Typography variant="h5" component="h1" gutterBottom>
+              Sign in
+            </Typography>
+            {error && <Typography color="error">{error}</Typography>}
+            <form onSubmit={handleSubmit}>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+                autoFocus
+                value={username}
+                onChange={handleUsernameChange}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={handlePasswordChange}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={buttonStyles} // Apply button styles here
+                style={{ marginTop: '16px' }}
+              >
+                Sign In
+              </Button>
+              <Button
+                fullWidth
+                color="primary"
+                onClick={() => navigate('/signup')}
+                style={{ marginTop: '8px', color: 'black' }}
+              >
+                Create An Account! Sign up now
+              </Button>
+            </form>
+          </FormContainer>
+        </Container>
+      </RootContainer>
     </> 
   );
 };
